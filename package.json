@@ -1,0 +1,17 @@
+{
+  "name": "bfhl-api",
+  "version": "1.0.0",
+  "description": "REST service for validating and assembling BFHL edge input",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
