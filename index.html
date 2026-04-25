@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BFHL API Interface</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 500px;
+      text-align: center;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    pre {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: left;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-top: 20px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>BFHL API Tester</h2>
+    <textarea id="userInput" rows="5" placeholder='Enter array like: ["A->B","B->C"]'></textarea>
+    <div style="margin: 10px 0; font-size: 12px; color: #666;">Enter a JSON array only, not an object. Example: ["A->B","B->C"]</div>
+    <button onclick="submitRequest()">Send Request</button>
+    <pre id="responseArea"></pre>
+  </div>
+
+  <script>
+    async function submitRequest() {
+      const inputField = document.getElementById("userInput");
+      const outputArea = document.getElementById("responseArea");
+
+      try {
+        const rawText = inputField.value.trim();
+        if (!rawText) {
+          outputArea.textContent = "Please enter some data.";
+          return;
+        }
+
+        const parsedArray = JSON.parse(rawText);
+
+        const apiResponse = await fetch("http://localhost:3000/bfhl", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ data: parsedArray })
+        });
+
+        if (!apiResponse.ok) {
+          throw new Error(`HTTP ${apiResponse.status}: ${apiResponse.statusText}`);
+        }
+
+        const responseData = await apiResponse.json();
+        outputArea.textContent = JSON.stringify(responseData, null, 2);
+
+      } catch (error) {
+        outputArea.textContent = "Error: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
